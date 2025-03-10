@@ -1,21 +1,47 @@
 import fs from 'fs';
+import path from 'path';
 import trataErros from './erros/funcoesErro.js';
 import { contaPalavras } from './index.js';
 import { montaSaidaArquivo } from './helpers.js';
+import { Command } from 'commander';
 
-const caminhoArquivo = process.argv;
-const link = caminhoArquivo[2];
-const endereco = caminhoArquivo[3];
+const program = new Command();
 
-fs.readFile(link, 'utf8', (erro, texto) => {
-    try {
-        if (erro) throw erro;
-        const resultado = contaPalavras(texto);
-        criaESalvaArquivo(resultado, endereco);
-    } catch (erro) {
-        trataErros(console.log(erro))
-    }
-});
+program
+    .version('0.0.1')
+    .option('-t, --texto <string>', 'Caminho do texto a ser analisado')
+    .option('-d, --destino <string>', 'Caminho da pasta destino')
+    .action((options) => {
+        const { texto, destino } = options;
+
+        if (!texto || !destino) {
+            console.error('Por favor inserir o caminho do texto e o caminho da pasta destino');
+            program.help();
+            return;
+        }
+        const caminhoTexto = path.resolve(texto);
+        const caminhoDestino = path.resolve(destino);
+        try {
+            processaArquivo(caminhoTexto, caminhoDestino);
+            console.log('Texto processado com sucesso!');
+        } catch (erro) {
+            console.log('Ocorreu um erro no processamento', erro);
+        }
+    })
+
+program.parse();
+
+function processaArquivo(texto, destino) {
+    fs.readFile(texto, 'utf8', (erro, texto) => {
+        try {
+            if (erro) throw erro;
+            const resultado = contaPalavras(texto);
+            criaESalvaArquivo(resultado, destino);
+        } catch (erro) {
+            trataErros(console.log(erro))
+        }
+    });
+}
 
 // async function criaESalvaArquivo(listaPalavras, endereco) {
 //     const arquivoNovo = `${endereco}/resultado.txt`;

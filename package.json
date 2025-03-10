@@ -17,5 +17,8 @@
     "url": "https://github.com/Gustavoo-z/library-nodejs/issues"
   },
   "homepage": "https://github.com/Gustavoo-z/library-nodejs#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "commander": "^13.1.0"
+  }
 }
