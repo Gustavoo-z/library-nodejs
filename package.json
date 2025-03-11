@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Gustavoo-z/library-nodejs#readme",
   "description": "",
   "dependencies": {
+    "chalk": "^5.4.1",
     "commander": "^13.1.0"
   }
 }
